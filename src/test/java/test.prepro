@@ -1,0 +1,20 @@
+function main(vec3 p1, vec3 p2, vec3 p3) {
+	vec3 x = p2 - p1;
+	vec3 s = p3 - p1;
+	vec3 y = s crossproduct x;
+	vec3 z = y crossproduct x;
+
+	print "Eingegeben (p1, p2, p3):";
+	print p1;
+	print p2;
+	print p3;
+
+	printXYZ(x, y, z);
+}
+
+function printXYZ(vec3 x, vec3 y, vec3 z) {
+	print "Berechnet (x, y, z):";
+	print x;
+	print y;
+	print z;
+}
