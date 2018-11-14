@@ -1,8 +1,9 @@
 package nodes;
 
 import com.oracle.truffle.api.nodes.Node;
-import nodes.function.Arguments;
+import main.PreProDataSet;
 import nodes.function.FunctionNode;
+import nodes.function.MainFunctionNode;
 
 import java.util.Arrays;
 
@@ -15,11 +16,9 @@ public class MainNode extends Node {
         );
     }
 
-    public void execute(Arguments arguments) {
-        FunctionNode mainFunctionNode = functionTable.getFunction("main");
+    public PreProDataSet execute(PreProDataSet preProDataSet) {
+        MainFunctionNode mainFunctionNode = (MainFunctionNode) functionTable.getFunction("main");
 
-        System.out.println("\n\nStarting PrePro-Interpreter...\n\n");
-
-        mainFunctionNode.execute(arguments);
+        return mainFunctionNode.executeMainFunction(preProDataSet);
     }
 }

@@ -78,12 +78,45 @@ private NodeFactory nodeFactory = new NodeFactory();
 // parser
 
 prepro returns [MainNode result]
-:                                   { nodeFactory.startFunctionList(); }
+:                                   { nodeFactory.startFunctionList();
+                                      MainFunctionNode mainFunctionNode;}
 (
-    function                        { nodeFactory.addFunction($function.result); }
+    mainFunction                    { nodeFactory.addFunction($mainFunction.result); }
+    | function                      { nodeFactory.addFunction($function.result); }
 )*
 EOF                                 { $result = new MainNode(nodeFactory.getFunctionsAsArray()); }
 ;
+
+mainFunction returns [MainFunctionNode result]:
+'function'                          { nodeFactory.startStatementList(); }
+'main'
+'('
+')'
+'{'
+('import'
+importDefinitions=functionArguments
+';'
+)?
+(
+    statement                       { nodeFactory.addStatement($statement.result, $statement.start.getLine()); }
+)*
+(
+'export'
+exportDefinitions
+';'
+)?
+'}'                                 { $result = new MainFunctionNode("main", $importDefinitions.result, $exportDefinitions.result, new StatementListNode(nodeFactory.getStatementsAsArray())); }
+;
+
+exportDefinitions returns [List<String> result]:
+                                    { $result = new ArrayList<>(); }
+IDENTIFIER                          { $result.add($IDENTIFIER.text); }
+(
+    ','
+    IDENTIFIER                      { $result.add($IDENTIFIER.text); }
+)*
+;
+
 
 function returns [FunctionNode result]:
 'function'                          { nodeFactory.startStatementList(); }
@@ -160,7 +193,7 @@ term returns [ExpressionNode result]:
 factor                              { $result = $factor.result; }
 (
       ('*' factor)                  { $result = new MulNode($result, $factor.result); }
-    | ('crossproduct' factor)       { $result = new CrossProductNode($result, $factor.result); }
+    | ('X' factor)                  { $result = new CrossProductNode($result, $factor.result); }
     | ('/' factor)                  { $result = new DivNode($result, $factor.result); }
 )*
 ;

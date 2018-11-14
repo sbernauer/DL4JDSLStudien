@@ -34,4 +34,8 @@ public class FunctionTable {
         }
         return functionNode;
     }
+
+    public void reset() {
+        functions.clear();
+    }
 }

@@ -10,10 +10,10 @@ import java.util.List;
 
 public class FunctionNode extends Node {
     private final String name;
-    private final List<ParameterDefinition> parameterDefinitions;
+    protected final List<ParameterDefinition> parameterDefinitions;
 
     @Child
-    private StatementListNode statementListNode;
+    protected StatementListNode statementListNode;
 
     public FunctionNode(String name, List<ParameterDefinition> parameterDefinitions, StatementListNode statementListNode) {
         this.name = name;

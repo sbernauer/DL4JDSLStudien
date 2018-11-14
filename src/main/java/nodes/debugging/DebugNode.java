@@ -1,6 +1,6 @@
 package nodes.debugging;
 
-import main.DebuggerInstance;
+import debbuging.DebuggerInstance;
 import nodes.SymbolTable;
 import nodes.statement.StatementNode;
 
