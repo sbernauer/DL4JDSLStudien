@@ -1,6 +1,5 @@
 package nodes.statement;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.Node;
 import nodes.SymbolTable;
 
@@ -15,5 +14,9 @@ public abstract class StatementNode extends Node {
 
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    public void reportError(String message) {
+        throw new RuntimeException("[Line " + lineNumber + "]: " + message);
     }
 }

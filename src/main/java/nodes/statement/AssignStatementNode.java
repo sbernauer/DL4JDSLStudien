@@ -14,10 +14,8 @@ public class AssignStatementNode extends StatementNode {
     private ExpressionNode expressionNode;
 
     /**
-     * @param variableName
-     * @param variableType   ether "vec3" oder "mat" oder null if the variable is reassinged.
-     *                       If variable is not defined and type is null, execption is thrown, because the type isn't known
-     * @param expressionNode
+     * @param variableType ether "vec3" oder "mat" oder null if the variable is reassinged.
+     *                     If variable is not defined and type is null, execption is thrown, because the type isn't known
      */
     public AssignStatementNode(String variableName, String variableType, ExpressionNode expressionNode) {
         this.variableName = variableName;
@@ -42,20 +40,21 @@ public class AssignStatementNode extends StatementNode {
     public void execute(SymbolTable symbolTable) {
         Variable value = expressionNode.execute(symbolTable);
         ;
-        if (variableType == null) { // Variable not already defined
+        if (variableType == null) {
             if (!symbolTable.variableExists(variableName)) {
-                throw new RuntimeException("Type of variable " + variableName + " not defined");
+                reportError("Type of variable " + variableName + " not defined");
             }
             if (symbolTable.getValueOrThrowExceptionIfNotDefined(variableName).getClass() != value.getClass()) {
-                throw new RuntimeException("Text TODO");
+                reportError("Cannot assign the Type " + value.getClass().getSimpleName()
+                        + " to the variable " + variableName + " with the Type "
+                        + symbolTable.getValueOrThrowExceptionIfNotDefined(variableName).getClass().getSimpleName());
             }
         } else {
             if (variableType != value.getClass()) {
-                throw new RuntimeException("Cannot assign the Type " + value.getClass().getSimpleName()
+                reportError("Cannot assign the Type " + value.getClass().getSimpleName()
                         + " to the variable " + variableName + " with the Type " + variableType.getSimpleName());
             }
         }
-
 
         symbolTable.setValue(variableName, value);
     }
